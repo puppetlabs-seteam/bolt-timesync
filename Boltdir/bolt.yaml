@@ -1,0 +1,4 @@
+service-url: https://master.inf.puppet.vm:8143
+cacert: /etc/puppetlabs/puppet/ssl/certs/ca.pem
+token-file: /root/.puppetlabs/token
+task-environment: production
