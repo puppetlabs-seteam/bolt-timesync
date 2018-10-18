@@ -1,0 +1,10 @@
+groups:
+  - name: winnode1
+    nodes:
+      - 172.16.219.20
+    config:
+      transport: winrm
+      winrm:
+        user: vagrant
+        password: vagrant
+        ssl: false
