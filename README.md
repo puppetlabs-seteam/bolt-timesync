@@ -14,7 +14,7 @@ Perform these preparatory steps first for this demo:
     * Update the IP address to the IP of your Windows VM
     * Update the username & password for the WinRM credentials you're using
 
-<br/>**To enable the later part of the demo where you integrate with PE, follow these steps:**
+<br/>**To enable the later part of the demo where you integrate with PE, follow these steps**
 * Update the `Boltdir/bolt.yaml` file:
     * Update the service-url to point to your PE master
     * Ensure you have a copy of the PE Master CA certificate and specify the path to where you have it stored
@@ -34,7 +34,7 @@ Perform these preparatory steps first for this demo:
 
 * Add the Puppet code in the Apply() black from Boltdir/modules/tools/plans/timesync_code.pp to a manifest in your PE control-repo, so that you could apply it to a node via PE if you wanted to.
 
-Step-by-step demo guide, part 1 (Bolt only):
+<br/>**Step-by-step demo guide (Bolt only)**
 1) Step into the bolt-timesync folder after cloning it with git:<br/>
 `cd bolt-timesync`
 2) Demonstrate the basic structure of a Bolt command:<br/>
