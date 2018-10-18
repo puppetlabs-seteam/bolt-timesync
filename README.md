@@ -35,9 +35,26 @@ Step-by-step demo guide, part 1 (Bolt only):
   6) Switch the context to time synchronization. Let's say you'd want to leverage Bolt to easily sync the time on your servers, expecting the time settings are configured correctly everywhere:<br/>
   `bolt command run 'w32tm /resync' --nodes winnode1`
   7) Notice the output:<br/>
-  `Sending resync command to local computer`<br/>
-  `The computer did not resync because no time data was available.`<br/>
-  The command apparently didn't succeed, but w32tm still exits with errorlevel 0 so it looks like a successful command. This will be relevant later.
-  8) 
+
+    Sending resync command to local computer
+    The computer did not resync because no time data was available.
+
+  8) The command apparently didn't succeed, but w32tm still exits with errorlevel 0 so it looks like a successful command. This will be relevant later.
+  9) Let's have a look at the w32tm configuration on this node:<br/>
+  `bolt command run 'w32tm /query /peers' --nodes winnode1`<br/>
+  The output shows the server is misconfigured:<br/>
+
+    STDOUT:
+    #Peers: 1
+ 
+    Peer: i.dont.exist
+    State: Pending
+    Time Remaining: 0.0000000s
+    Mode: 0 (reserved)
+    Stratum: 0 (unspecified)
+    PeerPoll Interval: 0 (unspecified)
+    HostPoll Interval: 0 (unspecified)`
+
+  9) 
 
 
