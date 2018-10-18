@@ -55,6 +55,39 @@ Step-by-step demo guide, part 1 (Bolt only):
     PeerPoll Interval: 0 (unspecified)
     HostPoll Interval: 0 (unspecified)`
 
-  9) 
+  10) Well, that is something we could fix with Bolt! Talk about how one *could* run a slew of `bolt command run` statements to fix this,but it's likely this problem would be present on more than just this one node. So, as a good sysadmin, we'd want to use a script to run all the commands on the node to clean up this mess. Let's have a look at the timesync.ps1 script we've made for this:<br/>
+  `cat timesync.ps1`
+  11)  Looks pretty good! Let's use Bolt to run this on the node:<br/>
+  `bolt script run timesync.ps1 --nodes win2012`<br/>
 
+    STDOUT:
+    Reconfiguring W32Time...
+    The command completed successfully.
+
+    Resyncing clock...
+    Sending resync command to local computer
+    The command completed successfully.
+
+    Current time source:
+    0.nl.pool.ntp.org
+
+    All configured time sources:
+    #Peers: 2
+
+    Peer: 0.nl.pool.ntp.org
+    State: Active
+    Time Remaining: 1023.9535139s
+    Mode: 3 (Client)
+    Stratum: 2 (secondary reference - syncd by (S)NTP)
+    PeerPoll Interval: 10 (1024s)
+    HostPoll Interval: 10 (1024s)
+
+    Peer: 1.nl.pool.ntp.org
+    State: Active
+    Time Remaining: 1023.9535139s
+    Mode: 3 (Client)
+    Stratum: 2 (secondary reference - syncd by (S)NTP)
+    PeerPoll Interval: 10 (1024s)
+    HostPoll Interval: 10 (1024s)
+  12) Nice! Now if only we could share this more easily with others... Time to turn this into a Puppet Task, so that others can use it, and we are able to use in directly in PE as well.
 
