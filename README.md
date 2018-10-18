@@ -2,6 +2,7 @@
 
 Perform these preparatory steps first for this demo:
 * Spin up a Windows VM and ensure you can reach it via WinRM (run `winrm quickconfig` if needed)
+* Ensure Guest time synchronization (through VirtualBox or VMware Fusion) is disabled for this VM.
 * Change the Win32Time settings to sync to a non-existing server:<br/>
   `w32tm /config /update /manualpeerlist:"i.dont.exist"`<br/>
   (You will need to re-run this command before a new demo to get back to the initial demo state)
