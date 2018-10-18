@@ -1,0 +1,10 @@
+{
+  "description": "Configures Windows Time via powershell",
+  "input_method": "powershell",
+  "parameters": {
+    "restart": {
+      "description": "Restart the service after configuration",
+      "type": "Boolean"
+    }
+  }
+}
