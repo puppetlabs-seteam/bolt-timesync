@@ -14,7 +14,7 @@ Perform these preparatory steps first for this demo:
     * Update the IP address to the IP of your Windows VM
     * Update the username & password for the WinRM credentials you're using
 
-To enable the later part of the demo where you integrate with PE, follow these steps: 
+<br/>**To enable the later part of the demo where you integrate with PE, follow these steps:**
 * Update the `Boltdir/bolt.yaml` file:
     * Update the service-url to point to your PE master
     * Ensure you have a copy of the PE Master CA certificate and specify the path to where you have it stored
@@ -22,7 +22,16 @@ To enable the later part of the demo where you integrate with PE, follow these s
 * Ensure you have a `tools` module on your Gitlab instance used by PE. If you don't have a `tools` module, create an new one and add it to your control-repo's Puppetfile. Ensure the module has a `tasks` and a `plans` folder.
 * Copy the tasks in `Boltdir/modules/tools/tasks` to the `tasks` folder of the `tools` module on your Gitlab instance.
 * Copy the plans in `Boltdir/modules/tools/plans` to the `plans` folder of the `tools` module on your Gitlab instance.
-* Add the `puppetlabs-bolt_shim` module to the Puppetfile of your PE control-repo
+* Add the `puppetlabs-bolt_shim`, `puppetlabs-puppet_agent` and `puppetlabs-apply_helpers` modules to the Puppetfile of your PE control-repo. For the last two, you need to add the following to your PE's Puppetfile today (as the correct releases aren't available on the Forge yet):<br/>
+
+        mod 'puppet_agent',
+          :git    => 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git',
+          :branch => 'master'
+
+        mod 'apply_helpers',
+          :git    => 'https://github.com/puppetlabs/puppetlabs-apply_helpers.git',
+          :branch => 'master'
+
 * Add the Puppet code in the Apply() black from Boltdir/modules/tools/plans/timesync_code.pp to a manifest in your PE control-repo, so that you could apply it to a node via PE if you wanted to.
 
 Step-by-step demo guide, part 1 (Bolt only):
