@@ -190,10 +190,11 @@ Yep the output shows 4 NTP servers all configured correctly. We have now automat
 32) If we tell Bolt how it can connect to Puppet Enterprise, we get access to PE-managed nodes directly, and we don't need to worry about SSH/WinRm access & credentials anymore. To do this, configure the bolt.yaml with 4 properties (and have the 2 files we specify here):<br/>
 `cat Boltdir/bolt.yaml`
 
-        service-url: https://master.inf.puppet.vm:8143
-        cacert: /etc/puppetlabs/puppet/ssl/certs/ca.pem
-        token-file: ~/.puppetlabs/token
-        task-environment: production
+        pcp:
+          service-url: https://master.inf.puppet.vm:8143
+          cacert: /etc/puppetlabs/puppet/ssl/certs/ca.pem
+          token-file: /home/root/.puppetlabs/token
+          task-environment: production
 33) We can now reference PE-managed nodes using the pcp:// transport:<br/>
 `bolt command run 'ping 8.8.8.8 -n 2' --nodes pcp://winnode1.puppet.vm`
 34) This works for tasks and plans too:<br/>
