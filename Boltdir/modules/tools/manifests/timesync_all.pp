@@ -1,5 +1,5 @@
-case $facts['osfamily'] {
-  'RedHat': {
+case $facts['kernel'] {
+  'Linux': {
     class { 'ntp':
       servers  => [ '0.nl.pool.ntp.org',
                     '1.nl.pool.ntp.org',
