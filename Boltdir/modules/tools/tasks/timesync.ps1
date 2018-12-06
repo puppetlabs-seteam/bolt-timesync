@@ -19,3 +19,4 @@ if ($Restart) {
     write-host "Restart parameter enabled, restarting Windows Time service"
     restart-service 'W32Time' -force
     write-host "Windows Time service restarted"
+}
