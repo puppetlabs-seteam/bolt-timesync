@@ -1,7 +1,17 @@
 groups:
-  - name: winnode1
+  - name: linux
     nodes:
-      - 172.16.219.20
+      - 1.2.3.4
+    config:
+      transport: ssh
+      ssh:
+        host-key-check: false
+        user: centos
+        run-as: root
+        private-key: /path/to/key
+  - name: windows
+    nodes:
+      - 5.6.7.8
     config:
       transport: winrm
       winrm:
