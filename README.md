@@ -20,11 +20,11 @@ Perform these preparatory steps first for this demo:
     * Ensure you have a copy of the PE Master CA certificate and specify the path to where you have it stored
     * Ensure you have a copy of the PE Master RBAC token and specify the path to where you have it stored. If you don't have one yet, run `puppet access login` on the master to generate one.
 * Ensure you have a `tools` module on your Gitlab instance used by PE. If you don't have a `tools` module, create an new one and add it to your control-repo's Puppetfile. Ensure the module has a `tasks` and a `plans` folder.
-* Copy the tasks in `modules/tools/tasks` to the `tasks` folder of the `tools` module on your Gitlab instance.
-* Copy the plans in `modules/tools/plans` to the `plans` folder of the `tools` module on your Gitlab instance.
+* Copy the tasks in `site-modules/tools/tasks` to the `tasks` folder of the `tools` module on your Gitlab instance.
+* Copy the plans in `site-modules/tools/plans` to the `plans` folder of the `tools` module on your Gitlab instance.
 * Add the `puppetlabs-bolt_shim`, `puppetlabs-puppet_agent` and `puppetlabs-apply_helpers` modules to the Puppetfile of your PE control-repo.
 
-* Add the Puppet code in the Apply() block from modules/tools/plans/timesync_code.pp to a manifest in your PE control-repo, so that you could apply it to a node via PE if you wanted to.
+* Add the Puppet code in the Apply() block from `site-modules/tools/plans/timesync_code.pp` to a manifest in your PE control-repo, so that you could apply it to a node via PE if you wanted to.
 
 <br/>**Step-by-step demo guide (Bolt only)**
 1) Step into the bolt-timesync folder after cloning it with git:<br/>
@@ -95,9 +95,9 @@ The output shows the server is misconfigured:<br/>
 12) Nice! Now if only we could share this more easily with others... Time to turn this into a Puppet Task, so that others can use it, and we are able to use in directly in PE as well.<br/>
 Wouldn't it be nice if we could pass parameters to the task, and have a description delivered with the task as well? We can do both quite easily with a Puppet Task.
 13) First, we've taken our script and copied it to a module (which really is nothing more than a directory in Bolt), into a /tasks subdirectory of the module. We've also added an optional 'restart' parameter to it:<br/>
-`cat modules/tools/tasks/timesync.ps1`
+`cat site-modules/tools/tasks/timesync.ps1`
 14) Next, we've added a bit of metadata to make it easier to work with the Task:<br/>
-`cat modules/tools/tasks/timesync.json`
+`cat site-modules/tools/tasks/timesync.json`
 15) Tasks are automatically given the name of their script file, without the extension. So now we can ask Bolt what this Task does and what it needs:<br/>
 `bolt task show tools::timesync`
 
@@ -111,7 +111,7 @@ Wouldn't it be nice if we could pass parameters to the task, and have a descript
             Restart the service after configuration
 
         MODULE:
-        /root/modules/tools
+        /root/site-modules/tools
 16) Let's try this out!<br/>
 `bolt task run --nodes windows tools::timesync restart=true`<br/>
 Note that the output now shows the extra two lines for restarting the service:
@@ -122,7 +122,7 @@ Note that the output now shows the extra two lines for restarting the service:
 Navigate to the PE console to show that the Task is there, but don't run it.
 18) So now we have this working, but what if we wanted to string multiple tasks together? Is there a good way to do this? Yes there is, and it's called Puppet Task Plans :-)<br/>
 In the same tools module, we created a `plans` directory where we can put our plans. A simple one looks like this:<br/>
-`cat modules/tools/plans/timesync.pp`
+`cat site-modules/tools/plans/timesync.pp`
 19) This plan simply runs the tools::timesync task, but with the restart parameter set to false, and then runs the (built-in) service task to restart the W32Time service. While this achieves the same end result, it does leverage the fact that Bolt will automatically halt the execution of the next task if the previous one failed. So now we don't have to script any of that into our original tools::timesync task anymore! Of course this is just a demo, but it shows the versatility.
 20) Plans can be shipped with modules just as Tasks, and you use them in Bolt in a very similar way:<br/>
   `bolt plan show tools::timesync`
@@ -136,7 +136,7 @@ In the same tools module, we created a `plans` directory where we can put our pl
         - nodes: TargetSpec
 
         MODULE:
-        /root/modules/tools  
+        /root/site-modules/tools  
 21) And of course we're gonna try that out too:<br/>
   `bolt plan run --nodes windows tools::timesync`
 
@@ -152,11 +152,10 @@ In the same tools module, we created a `plans` directory where we can put our pl
 24) Let's first see if we can find a piece of existing automation for managing time on Windows. Navigate to https://forge.puppet.com and search for time, with the Operating System filter set to 'Windows'. In the results (about halfway down the page) you'll see a 'windowstime' module by the user 'ncorrare'. Click that module and you'll see that with this module, we would need only a couple of lines of IaC to automate this! So we want to try out this module now.
 25) Click on the 'Dependencies' tab of the module and note that this module depends on 2 puppetlabs modules. We need to tell Bolt that we want to use this module and the 2 modules it depends on. We do this by putting them in a Puppetfile:<br/>
 `cat Puppetfile`
-The 4th module in the Puppetfile is the local tools module that contains the tasks and plans we are demonstrating. We don't want these to be removed when we install the modules in the Puppetfile, so we declare them as local.
-26) Let's install these 3 new modules:<br/>
+1)  Let's install these 3 new modules:<br/>
 `bolt puppetfile install`
 27) Now we should have a way of applying those few lines of IaC to our demo node. In Bolt, we can do that in a Plan, using the Apply() function. It looks like this:<br/>
-`cat modules/tools/plans/timesync_code.pp`<br/>
+`cat site-modules/tools/plans/timesync_code.pp`<br/>
 Basically the plan has 2 statements, the apply_prep() statement prepares the node for handling IaC (by installing the puppet agent), and the apply() statement will apply the block of IaC that it contains to the node. This bit of IaC has some more configuration in it (4 NTP servers, additional timesync flags), so we should see this cause changes when we apply it.
 28) Let's try updating our node with this new configuration:<br/>
 `bolt plan run --node windows tools::timesync_code`
