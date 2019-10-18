@@ -1,0 +1,20 @@
+version: 2
+groups:
+  - name: dyn
+    targets:
+      - _plugin: puppetdb
+        query: "nodes[] { }"
+    config:
+      transport: pcp
+  - name: dynwindows
+    targets:
+      - _plugin: puppetdb
+        query: "inventory[certname] { facts.osfamily = 'windows' }"
+    config:
+      transport: pcp
+  - name: dynlinux
+    targets:
+      - _plugin: puppetdb
+        query: "inventory[certname] { facts.osfamily = 'RedHat' }"
+    config:
+      transport: pcp
