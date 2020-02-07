@@ -1,0 +1,21 @@
+version : 2
+groups:
+  - name: linux
+    targets:
+      - xxxnixN.classroom.puppet.com
+    config:
+      transport: ssh
+      ssh:
+        host-key-check: false
+        user: centos
+        run-as: root
+        private-key: /path/to/key
+  - name: windows
+    targets:
+      - xxxwinN.classroom.puppet.com
+    config:
+      transport: winrm
+      winrm:
+        user: vagrant
+        password: vagrant
+        ssl: false
