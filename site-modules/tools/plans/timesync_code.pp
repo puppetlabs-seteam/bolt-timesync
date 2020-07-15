@@ -1,9 +1,9 @@
 plan tools::timesync_code(
-  TargetSpec $nodes,
+  TargetSpec $targets,
 ) {
-  apply_prep($nodes)
+  apply_prep($targets)
 
-  apply($nodes) {
+  apply($targets) {
     class { 'windowstime':
       servers  => { '0.nl.pool.ntp.org' => '0x08',
                     '1.nl.pool.ntp.org' => '0x08',
