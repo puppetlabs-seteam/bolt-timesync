@@ -1,6 +1,6 @@
 plan tools::timesync(
-  TargetSpec $nodes,
+  TargetSpec $targets,
 ) {
-  run_task('tools::timesync', $nodes, restart => false)
-  run_task('service::windows', $nodes, name => 'W32Time', action => 'restart')
+  run_task('tools::timesync', $targets, restart => false)
+  run_task('service::windows', $targets, name => 'W32Time', action => 'restart')
 }

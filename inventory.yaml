@@ -1,6 +1,6 @@
 groups:
   - name: linux
-    nodes:
+    targets:
       - 1.2.3.4
     config:
       transport: ssh
@@ -10,7 +10,7 @@ groups:
         run-as: root
         private-key: /path/to/key
   - name: windows
-    nodes:
+    targets:
       - 5.6.7.8
     config:
       transport: winrm
